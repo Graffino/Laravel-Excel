@@ -1,5 +1,6 @@
 <?php
 
+use Maatwebsite\Excel\Events\TestBeforeWriting;
 use Maatwebsite\Excel\Excel;
 
 return [
@@ -325,4 +326,17 @@ return [
         */
         'force_resync_remote' => null,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Event
+    |--------------------------------------------------------------------------
+    |
+    | The user can implement their own events which can extend the library's 
+    |
+    |
+    */
+    'events' => [
+        'beforeWriting' => TestBeforeWriting::class
+    ]
 ];

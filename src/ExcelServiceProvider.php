@@ -8,6 +8,7 @@ use Laravel\Lumen\Application as LumenApplication;
 use Maatwebsite\Excel\Cache\CacheManager;
 use Maatwebsite\Excel\Console\ExportMakeCommand;
 use Maatwebsite\Excel\Console\ImportMakeCommand;
+use Maatwebsite\Excel\EventRegistry;
 use Maatwebsite\Excel\Files\Filesystem;
 use Maatwebsite\Excel\Files\TemporaryFileFactory;
 use Maatwebsite\Excel\Mixins\DownloadCollection;
@@ -84,6 +85,10 @@ class ExcelServiceProvider extends ServiceProvider
 
         $this->app->bind(Filesystem::class, function () {
             return new Filesystem($this->app->make('filesystem'));
+        });
+
+        $this->app->singlenton(EventRegistry::class, function () {
+            return new EventRegistry();
         });
 
         $this->app->bind('excel', function () {

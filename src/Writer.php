@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\EventRegistry;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\BeforeWriting;
 use Maatwebsite\Excel\Factories\WriterFactory;
@@ -37,12 +38,16 @@ class Writer
      */
     protected $temporaryFileFactory;
 
+    protected $eventRegistry;
+
     /**
      * @param TemporaryFileFactory $temporaryFileFactory
      */
-    public function __construct(TemporaryFileFactory $temporaryFileFactory)
+    public function __construct(TemporaryFileFactory $temporaryFileFactory, EventRegistry $eventRegistry)
     {
         $this->temporaryFileFactory = $temporaryFileFactory;
+
+        $this->eventRegistry = $eventRegistry;
 
         $this->setDefaultValueBinder();
     }
@@ -135,6 +140,9 @@ class Writer
             $this->spreadsheet,
             $export
         );
+
+        $beforeWriting = $this->eventRegistry->getEventClassName("beforeWriting");
+        event(new $beforeWriting($this, $this->exportable));
 
         $writer->save(
             $path = $temporaryFile->getLocalPath()
