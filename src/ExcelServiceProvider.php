@@ -87,7 +87,7 @@ class ExcelServiceProvider extends ServiceProvider
             return new Filesystem($this->app->make('filesystem'));
         });
 
-        $this->app->singlenton(EventRegistry::class, function () {
+        $this->app->singleton(EventRegistry::class, function () {
             return new EventRegistry();
         });
 
