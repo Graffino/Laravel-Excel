@@ -123,7 +123,7 @@ class Writer
      * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
      * @throws \PhpOffice\PhpSpreadsheet\Exception
      */
-    public function write($export, TemporaryFile $temporaryFile, string $writerType): TemporaryFile
+    public function write($export, TemporaryFile $temporaryFile, string $writerType, bool $isChunkWriting = false): TemporaryFile
     {
         $this->exportable = $export;
 
@@ -135,7 +135,9 @@ class Writer
             $this->registerListeners($export->registerEvents());
         }
 
-        $this->raise(new BeforeChunkWriting($this, $this->exportable));
+        if($isChunkWriting){
+            $this->raise(new BeforeChunkWriting($this, $this->exportable));
+        }
 
         $writer = WriterFactory::make(
             $writerType,
