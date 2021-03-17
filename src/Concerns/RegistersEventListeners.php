@@ -4,6 +4,7 @@ namespace Maatwebsite\Excel\Concerns;
 
 use Maatwebsite\Excel\Events\AfterImport;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Events\BeforeChunkWriting;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\BeforeImport;
 use Maatwebsite\Excel\Events\BeforeSheet;
@@ -25,6 +26,10 @@ trait RegistersEventListeners
 
         if (method_exists($this, 'beforeWriting')) {
             $listeners[BeforeWriting::class] = [static::class, 'beforeWriting'];
+        }
+
+        if (method_exists($this, 'BeforeChunkWriting')) {
+            $listeners[BeforeChunkWriting::class] = [static::class, 'beforeChunkWriting'];
         }
 
         if (method_exists($this, 'beforeImport')) {

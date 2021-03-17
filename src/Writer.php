@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\BeforeChunkWriting;
 use Maatwebsite\Excel\Events\BeforeExport;
 use Maatwebsite\Excel\Events\BeforeWriting;
 use Maatwebsite\Excel\Factories\WriterFactory;
@@ -129,6 +130,12 @@ class Writer
         $this->spreadsheet->setActiveSheetIndex(0);
 
         $this->raise(new BeforeWriting($this, $this->exportable));
+
+        if ($export instanceof WithEvents && !count($this->events)) {
+            $this->registerListeners($export->registerEvents());
+        }
+
+        $this->raise(new BeforeChunkWriting($this, $this->exportable));
 
         $writer = WriterFactory::make(
             $writerType,
