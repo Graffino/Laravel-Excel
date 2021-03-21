@@ -28,7 +28,7 @@ trait RegistersEventListeners
             $listeners[BeforeWriting::class] = [static::class, 'beforeWriting'];
         }
 
-        if (method_exists($this, 'BeforeChunkWriting')) {
+        if (method_exists($this, 'beforeChunkWriting')) {
             $listeners[BeforeChunkWriting::class] = [static::class, 'beforeChunkWriting'];
         }
 
